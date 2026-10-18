@@ -17,3 +17,8 @@ publish/
 # OS
 .DS_Store
 Thumbs.db
+
+# Java / Gradle build outputs
+.gradle/
+build/
+*.class
