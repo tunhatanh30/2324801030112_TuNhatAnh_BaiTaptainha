@@ -1,0 +1,79 @@
+# Build outputs
+[Bb]in/
+[Oo]bj/
+out/
+
+# .NET runtime and SDK files
+*.runtimeconfig.json
+*.runtimeconfig.dev.json
+*.runtimeconfig.prod.json
+*.deps.json
+*.edmx
+*.csproj.user
+*.csproj.DotSettings.user
+*.npmrc
+*.sln.dotsettings.user
+
+# Visual Studio files
+.vs/
+*.suo
+*.ntvs*.*njsproj
+*.sln.ide*
+
+# NuGet packages
+*.nupkg
+*.nupkg.sha512
+*.snupkg
+*.snupkg.sha512
+[Pp]ackages/
+*.nuget.props
+*.nuget.targets
+nuget.config
+
+# Test results
+[Rr]esults/
+[Tt]est[Rr]esult*/
+[Tt]ests/
+*[Tt]ests.cs
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]uild/
+[Bb]uild[Ll]og.*
+*.[Cc]ache
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
