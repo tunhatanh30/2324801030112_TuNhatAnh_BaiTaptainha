@@ -1,0 +1,16 @@
+<Solution>
+  <Project Path="AuthService.Api/AuthService.Api.csproj" />
+  <Project Path="AuthService.Test/AuthService.Test.csproj" />
+  <Project Path="AuthService/AuthService.csproj" />
+  <Project Path="ChatService.Api/ChatService.Api.csproj" />
+  <Project Path="ChatService.Test/ChatService.Test.csproj" />
+  <Project Path="ChatService/ChatService.csproj" />
+  <Project Path="DashboardService.Api/DashboardService.Api.csproj" />
+  <Project Path="DashboardService.Test/DashboardService.Test.csproj" />
+  <Project Path="DashboardService/DashboardService.csproj" />
+  <Project Path="EurekaServer/EurekaServer.csproj" />
+  <Project Path="PolicyService.Api/PolicyService.Api.csproj" />
+  <Project Path="PricingService.Api/PricingService.Api.csproj" />
+  <Project Path="PricingService.Test/PricingService.Test.csproj" />
+  <Project Path="PricingService/PricingService.csproj" />
+</Solution>
