@@ -9,8 +9,14 @@
   <Project Path="DashboardService.Test/DashboardService.Test.csproj" />
   <Project Path="DashboardService/DashboardService.csproj" />
   <Project Path="EurekaServer/EurekaServer.csproj" />
+  <Project Path="PaymentService.Api/PaymentService.Api.csproj" />
+  <Project Path="PaymentService.Test/PaymentService.Test.csproj" />
+  <Project Path="PaymentService/PaymentService.csproj" />
   <Project Path="PolicyService.Api/PolicyService.Api.csproj" />
   <Project Path="PricingService.Api/PricingService.Api.csproj" />
   <Project Path="PricingService.Test/PricingService.Test.csproj" />
   <Project Path="PricingService/PricingService.csproj" />
+  <Project Path="ProductService.Api/ProductService.Api.csproj" />
+  <Project Path="ProductService.Test/ProductService.Test.csproj" />
+  <Project Path="ProductService/ProductService.csproj" />
 </Solution>

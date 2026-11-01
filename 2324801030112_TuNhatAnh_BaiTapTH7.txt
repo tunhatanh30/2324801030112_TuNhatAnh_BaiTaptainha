@@ -1,0 +1,13 @@
+BÀI THỰC HÀNH SỐ 7 – PHẦN 5: MARTEN
+Sinh viên: Tú Nhất Anh - MSSV: 2324801030112
+
+Link nộp bài (GitHub):
+https://github.com/tunhatanh30/2324801030112_TuNhatAnh_BaiTaptainha
+
+Thư mục/nội dung nộp bài:
+- Task #1: Package Marten 7.19.1 (NuGet) cài trong PaymentService/PaymentService.csproj
+- Task #2: PaymentService (code bổ sung 3 thư mục: Domain/, DataAccess/Marten/, Jobs/)
+- Task #3: ProductService (code bổ sung 3 thư mục: Commands/, Queries/, DataAccess/EF/)
+
+Kết quả: dotnet build TH6_Microservices.slnx -> Build succeeded, 0 error.
+Tests: PricingService.Test 10/10, ProductService.Test 14/14, PaymentService.Test 6/6 - PASSED.

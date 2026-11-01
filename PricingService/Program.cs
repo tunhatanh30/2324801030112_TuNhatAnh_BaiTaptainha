@@ -9,6 +9,7 @@ using Steeltoe.Discovery.Client;
 using PricingService.Api.Commands;
 using PricingService.Behaviors;
 using PricingService.Domain;
+using PricingService.Infrastructure;
 using PricingService.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
