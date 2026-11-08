@@ -1,0 +1,17 @@
+BÀI THỰC HÀNH SỐ 9 – PHẦN 7: TRIỂN KHAI HỆ THỐNG
+Sinh viên: Tú Nhất Anh - MSSV: 2324801030112
+
+Link nộp bài (GitHub):
+https://github.com/tunhatanh30/2324801030112_TuNhatAnh_BaiTaptainha
+
+Nội dung:
+- Task #1: Bổ sung code PolicyService + PolicySearchService (5 thư mục .rar)
+- Task #2: Triển khai hệ thống - demo Eureka (PRICINGSERVICE UP) + Pricing API
+  {"totalPrice":98.00} - đã kiểm chứng chạy được. Xem video demo theo
+  hướng dẫn trong README.md và file run-demo-th9.bat.
+
+Video demo (upload lên Drive rồi nộp link lên e-learning):
+https://drive.google.com/  (user tự quay & up)
+
+Kết quả: dotnet build TH6_Microservices.slnx -> Build succeeded, 0 error.
+Tests: Pricing 10/10, Product 14/14, Payment 6/6, Policy 8/8, Search 1/1 - PASSED.

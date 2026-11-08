@@ -12,7 +12,12 @@
   <Project Path="PaymentService.Api/PaymentService.Api.csproj" />
   <Project Path="PaymentService.Test/PaymentService.Test.csproj" />
   <Project Path="PaymentService/PaymentService.csproj" />
+  <Project Path="PolicySearchService.Api/PolicySearchService.Api.csproj" />
+  <Project Path="PolicySearchService.Test/PolicySearchService.Test.csproj" />
+  <Project Path="PolicySearchService/PolicySearchService.csproj" />
   <Project Path="PolicyService.Api/PolicyService.Api.csproj" />
+  <Project Path="PolicyService.Test/PolicyService.Test.csproj" />
+  <Project Path="PolicyService/PolicyService.csproj" />
   <Project Path="PricingService.Api/PricingService.Api.csproj" />
   <Project Path="PricingService.Test/PricingService.Test.csproj" />
   <Project Path="PricingService/PricingService.csproj" />
