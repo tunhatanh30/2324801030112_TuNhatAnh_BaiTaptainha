@@ -35,16 +35,25 @@ async Task WriteXml(HttpContext ctx, string xml, int status = 200)
     await ctx.Response.WriteAsync(xml);
 }
 
-// ==================== DASHBOARD ====================
+// ==================== DASHBOARD & DEMO WEB ====================
 app.MapGet("/", async (HttpContext ctx) =>
 {
+    var htmlPath = Path.Combine(app.Environment.ContentRootPath, "..", "demo-th9.html");
+    if (!File.Exists(htmlPath)) htmlPath = Path.Combine(app.Environment.ContentRootPath, "demo-th9.html");
+    if (File.Exists(htmlPath))
+    {
+        ctx.Response.ContentType = "text/html; charset=utf-8";
+        await ctx.Response.WriteAsync(await File.ReadAllTextAsync(htmlPath));
+        return;
+    }
+
     var apps = registry.GetAllApps();
     var sb = new StringBuilder();
     sb.Append("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Eureka Server</title>");
     sb.Append("<style>body{font-family:Arial,sans-serif;margin:20px;}h1{color:#333;}table{border-collapse:collapse;width:100%;margin-top:16px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#f4f4f4;}tr:nth-child(even){background:#fafafa;}.status-up{color:green;font-weight:bold;}.status-down{color:red;font-weight:bold;}.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:12px;background:#e1f5e1;color:#2e7d32;}a.refresh{margin-bottom:12px;display:inline-block;padding:6px 12px;background:#007bff;color:#fff;text-decoration:none;border-radius:4px;}a.refresh:hover{background:#0056b3;}</style>");
     sb.Append("</head><body>");
-    sb.Append("<h1>\ud83c\udf89 Eureka Service Registry</h1>");
-    sb.Append("<a class='refresh' href='/'>\ud83d\udd04 Refresh</a>");
+    sb.Append("<h1>🎉 Eureka Service Registry</h1>");
+    sb.Append("<a class='refresh' href='/'>🔄 Refresh</a>");
     sb.Append($"<p><strong>Running on:</strong> http://localhost:8761</p>");
     sb.Append($"<p><strong>Registered applications:</strong> {apps.Count}</p>");
     sb.Append($"<p><strong>Dashboard time:</strong> {DateTime.Now:yyyy-MM-dd HH:mm:ss}</p>");
@@ -70,6 +79,21 @@ app.MapGet("/", async (HttpContext ctx) =>
     sb.Append("</body></html>");
     ctx.Response.ContentType = "text/html; charset=utf-8";
     await ctx.Response.WriteAsync(sb.ToString());
+});
+
+app.MapGet("/demo", async (HttpContext ctx) =>
+{
+    var htmlPath = Path.Combine(app.Environment.ContentRootPath, "..", "demo-th9.html");
+    if (!File.Exists(htmlPath)) htmlPath = Path.Combine(app.Environment.ContentRootPath, "demo-th9.html");
+    if (File.Exists(htmlPath))
+    {
+        ctx.Response.ContentType = "text/html; charset=utf-8";
+        await ctx.Response.WriteAsync(await File.ReadAllTextAsync(htmlPath));
+    }
+    else
+    {
+        ctx.Response.StatusCode = 404;
+    }
 });
 
 string HtmlEncode(string s) => System.Net.WebUtility.HtmlEncode(s ?? "");

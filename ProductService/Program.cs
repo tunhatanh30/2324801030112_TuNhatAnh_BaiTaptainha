@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using ProductService.DataAccess.EF;
 using ProductService.Init;
@@ -19,12 +19,15 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(o => o.AddPolicy("AllowAny", b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 builder.Services.AddDiscoveryClient(builder.Configuration);
 builder.Services.AddEFConfiguration(builder.Configuration);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddProductDemoInitializer();
 
 var app = builder.Build();
+
+app.UseCors("AllowAny");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -33,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

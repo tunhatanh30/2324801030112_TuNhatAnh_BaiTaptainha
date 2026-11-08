@@ -5,10 +5,12 @@ Link nộp bài (GitHub):
 https://github.com/tunhatanh30/2324801030112_TuNhatAnh_BaiTaptainha
 
 Nội dung:
-- Task #1: Bổ sung code PolicyService + PolicySearchService (5 thư mục .rar)
-- Task #2: Triển khai hệ thống - demo Eureka (PRICINGSERVICE UP) + Pricing API
-  {"totalPrice":98.00} - đã kiểm chứng chạy được. Xem video demo theo
-  hướng dẫn trong README.md và file run-demo-th9.bat.
+- Task #1: Bổ sung code PolicyService + PolicySearchService (5 thư mục .rar từ thầy)
+- Task #2: Triển khai hệ thống - Web Demo trực quan tại http://localhost:8761:
+  + Chức năng 1: Eureka Service Registry (PRICINGSERVICE & PRODUCTSERVICE đều UP)
+  + Chức năng 2: Dịch vụ định giá Pricing API (tính giá chuẩn 98.00 €)
+  + Chức năng 3 (Bonus): Danh mục sản phẩm ProductService (TRI, HSI, FAI, CAR)
+  Chạy file run-demo-th9.bat để tự động khởi động 3 dịch vụ và mở Web Demo.
 
 Video demo (upload lên Drive rồi nộp link lên e-learning):
 https://drive.google.com/  (user tự quay & up)

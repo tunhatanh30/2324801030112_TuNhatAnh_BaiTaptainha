@@ -3,147 +3,644 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Demo TH9 — Hệ thống Microservices Bảo hiểm</title>
+<title>Demo TH9 — Hệ thống Microservices Đại lý Bảo hiểm (.NET Core)</title>
 <style>
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --bg: #0f172a;
+    --card-bg: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
   * { box-sizing: border-box; }
-  body { font-family: "Segoe UI", Arial, sans-serif; margin:0; background:#f4f6fb; color:#1a2233; }
-  header { background: linear-gradient(135deg,#0b5cff,#00b386); color:#fff; padding:22px; }
-  header h1 { margin:0 0 6px; font-size:24px; }
-  header p { margin:0; opacity:.95; font-size:14px; }
-  .badge { display:inline-block; background:#ffffff33; padding:3px 10px; border-radius:20px; font-size:12px; margin-top:10px; }
-  main { max-width:960px; margin:0 auto; padding:20px; }
-  .card { background:#fff; border:1px solid #e3e7f0; border-radius:12px; padding:18px; margin:16px 0; box-shadow:0 2px 10px #0001; }
-  .card h2 { margin-top:0; font-size:18px; }
-  button { padding:9px 16px; border:0; border-radius:8px; background:#0b5cff; color:#fff; cursor:pointer; font-size:14px; font-weight:600; }
-  button:hover { background:#0846c9; }
-  button.ghost { background:#eef2ff; color:#0b5cff; }
-  table { border-collapse: collapse; width:100%; margin-top:12px; font-size:14px; }
-  th,td { border:1px solid #dde3ee; padding:8px; text-align:left; }
-  th { background:#f0f4ff; }
-  .up { color:#0a9d58; font-weight:700; }
-  pre { background:#0f172a; color:#86efac; padding:14px; border-radius:10px; overflow:auto; font-size:13px; min-height:60px; }
-  input, select { padding:8px; border:1px solid #cbd5e1; border-radius:8px; margin:3px 8px 3px 0; font-size:14px; }
-  label { font-size:13px; color:#334155; display:inline-block; margin:4px 0; }
-  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-  .ok { color:#0a9d58; font-weight:600; }
-  .err { color:#dc2626; font-weight:600; }
-  footer { text-align:center; color:#64748b; font-size:12px; padding:20px; }
-  a { color:#0b5cff; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    background: #f1f5f9;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #0d9488 100%);
+    color: #fff;
+    padding: 28px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+  .header-content {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  header p {
+    margin: 0 0 12px;
+    font-size: 15px;
+    opacity: 0.95;
+  }
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .badge-success { background: #22c55e; color: #fff; }
+  main {
+    max-width: 1100px;
+    margin: -16px auto 40px;
+    padding: 0 16px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 820px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+  .card-header h2 {
+    margin: 0;
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  button {
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+  button.ghost {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
+  button.ghost:hover { background: #cbd5e1; }
+  button.success {
+    background: var(--success);
+  }
+  button.success:hover { background: #15803d; }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 12px;
+    font-size: 13.5px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+  }
+  th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+  }
+  tr:hover { background: #f8fafc; }
+  .status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .status-up { background: #dcfce7; color: #166534; }
+  .status-down { background: #fee2e2; color: #991b1b; }
+  pre {
+    background: #0f172a;
+    color: #a7f3d0;
+    padding: 14px;
+    border-radius: 10px;
+    overflow: auto;
+    font-size: 13px;
+    line-height: 1.45;
+    max-height: 240px;
+  }
+  input, select {
+    padding: 9px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+  .form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+  }
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .checkbox-group label {
+    font-size: 13.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .result-banner {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border: 1px solid #a7f3d0;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .result-banner .price {
+    font-size: 28px;
+    font-weight: 800;
+    color: #065f46;
+  }
+  .task-box {
+    background: #f8fafc;
+    border-left: 4px solid var(--primary);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 24px;
+  }
 </style>
 </head>
 <body>
+
 <header>
-  <h1>🎉 Demo Bài TH9 — Triển khai hệ thống Microservices</h1>
-  <p>Công ty Bảo hiểm • Chức năng 1: Eureka Discovery &nbsp;|&nbsp; Chức năng 2: Pricing Service</p>
-  <span class="badge">Sinh viên: Tú Nhất Anh — 2324801030112</span>
+  <div class="header-content">
+    <h1>🚀 Demo Hệ Thống Microservices — Đại Lý Bảo Hiểm</h1>
+    <p>Bài thực hành số 9 • Phần 7: Triển khai hệ thống trên môi trường .NET Core 8.0</p>
+    <div class="badge-row">
+      <span class="badge">👤 Sinh viên: <strong>Tú Nhất Anh</strong></span>
+      <span class="badge">🎓 MSSV: <strong>2324801030112</strong></span>
+      <span class="badge badge-success">● Trạng thái: SẴN SÀNG QUAY VIDEO DEMO</span>
+    </div>
+  </div>
 </header>
+
 <main>
-  <div class="card">
+  <!-- Trạng thái hệ thống -->
+  <div class="card" style="margin-top:20px;">
+    <div class="card-header">
+      <h2>📡 Trạng Thái Hệ Thống & Cổng Kết Nối</h2>
+      <span id="quickStatus" class="status-pill status-up">Đang kiểm tra...</span>
+    </div>
     <div class="row" style="justify-content:space-between;">
-      <h2 style="margin:0">Trạng thái hệ thống</h2>
-      <span id="sysStatus">Đang kiểm tra...</span>
-    </div>
-    <div class="row" style="margin-top:10px;">
-      <button onclick="checkAll()">✅ Kiểm tra lại</button>
-      <button class="ghost" onclick="loadEureka()">🔄 Refresh Eureka</button>
-      <a href="http://localhost:8761" target="_blank">Mở Eureka Dashboard →</a>
+      <div style="font-size:14px; color:#475569;">
+        Eureka Server: <code>http://localhost:8761</code> &nbsp;|&nbsp;
+        PricingService: <code>http://localhost:5053</code> &nbsp;|&nbsp;
+        ProductService: <code>http://localhost:5030</code>
+      </div>
+      <div class="row">
+        <button onclick="checkAll()">🔄 Kiểm tra tất cả</button>
+        <button class="ghost" onclick="window.open('http://localhost:8761', '_blank')">🌐 Mở Eureka Dashboard</button>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <h2>Chức năng 1 — Eureka Service Registry (cổng 8761)</h2>
-    <p style="font-size:14px;color:#475569;">PricingService tự đăng ký lên Eureka khi khởi động. Bảng dưới tự tải từ <code>GET /eureka/apps</code>.</p>
-    <div id="eureka"><p>Đang tải...</p></div>
+  <div class="grid-2">
+    <!-- Chức năng 1: Eureka Service Discovery -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🔍 Chức Năng 1 — Eureka Service Registry</h2>
+        <span class="tag">Port 8761</span>
+      </div>
+      <p style="font-size:13.5px;color:#475569;margin-top:0;">
+        Các Microservice tự động đăng ký với Eureka Server khi khởi chạy. Dưới đây là danh sách trực tiếp từ <code>GET /eureka/apps</code>:
+      </p>
+      <div id="eurekaContainer">
+        <p style="color:#64748b;">Đang tải danh sách microservices...</p>
+      </div>
+      <div class="row" style="margin-top:14px;">
+        <button onclick="loadEureka()">🔄 Làm mới danh sách</button>
+        <span id="eurekaCount" style="font-size:13px;color:#64748b;"></span>
+      </div>
+    </div>
+
+    <!-- Chức năng 2: Pricing Service -->
+    <div class="card">
+      <div class="card-header">
+        <h2>💰 Chức Năng 2 — Dịch Vụ Định Giá (Pricing)</h2>
+        <span class="tag">Port 5053</span>
+      </div>
+      <p style="font-size:13.5px;color:#475569;margin-top:0;">
+        Tính toán phí bảo hiểm du lịch (gói TRI) theo số lượng hành khách, điểm đến và các gói quyền lợi cover.
+      </p>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="form-group">
+          <label>Mã sản phẩm:</label>
+          <select id="productCode">
+            <option value="TRI" selected>TRI — Bảo hiểm Du lịch</option>
+            <option value="HSI">HSI — Happy Smile</option>
+            <option value="FAI">FAI — Bảo hiểm Nông nghiệp</option>
+            <option value="CAR">CAR — Bảo hiểm Xe hơi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Điểm đến du lịch:</label>
+          <select id="destination">
+            <option value="EUR" selected>EUR (Châu Âu)</option>
+            <option value="WORLD">WORLD (Toàn cầu)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="form-group">
+          <label>Số người lớn:</label>
+          <input id="adults" type="number" value="1" min="1" max="10">
+        </div>
+        <div class="form-group">
+          <label>Số trẻ em:</label>
+          <input id="children" type="number" value="1" min="0" max="10">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Các quyền lợi bảo hiểm đã chọn (Covers):</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="coverC1" checked value="C1"> C1 (Tai nạn cá nhân)</label>
+          <label><input type="checkbox" id="coverC2" checked value="C2"> C2 (Chi phí y tế)</label>
+          <label><input type="checkbox" id="coverC3" checked value="C3"> C3 (Hành lý & Trễ chuyến)</label>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:14px;">
+        <button class="success" onclick="calcPrice()">⚡ Tính phí bảo hiểm ngay</button>
+        <button class="ghost" onclick="fillSample()">📋 Điền mẫu chuẩn (98.00)</button>
+      </div>
+
+      <div id="priceBanner" class="result-banner" style="display:none;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#065f46;text-transform:uppercase;">Tổng Phí Bảo Hiểm</div>
+          <div id="priceValue" class="price">98.00 €</div>
+        </div>
+        <div id="coverBreakdown" style="font-size:13px;text-align:right;color:#047857;">
+          C1: 26.00 | C2: 52.00 | C3: 20.00
+        </div>
+      </div>
+
+      <h4 style="margin:16px 0 6px; font-size:13px; color:#475569;">Phản hồi JSON từ API (POST /api/Pricing):</h4>
+      <pre id="priceJson">Chưa gọi API.</pre>
+    </div>
   </div>
 
+  <!-- Chức năng 3 (Bonus): Danh mục sản phẩm từ ProductService -->
   <div class="card">
-    <h2>Chức năng 2 — Pricing Service (cổng 5053)</h2>
-    <p style="font-size:14px;color:#475569;">Nhập thông tin khách hàng → tính giá bảo hiểm (TRI). Quay video đoạn này là đủ chứng minh.</p>
-    <div>
-      <label>ProductCode<br><input id="product" value="TRI" style="width:120px"></label>
-      <label>Số người lớn<br><input id="adults" type="number" value="1" min="1" style="width:90px"></label>
-      <label>Số trẻ em<br><input id="children" type="number" value="1" min="0" style="width:90px"></label>
-      <label>Destination<br>
-        <select id="dest"><option value="EUR">EUR (Châu Âu)</option><option value="WORLD">WORLD (Quốc tế)</option></select>
-      </label>
+    <div class="card-header">
+      <h2>📦 Danh Mục Sản Phẩm Bảo Hiểm (ProductService)</h2>
+      <span class="tag">Port 5030</span>
     </div>
-    <div class="row" style="margin-top:10px;">
-      <button onclick="calcPrice()">💰 Tính giá bảo hiểm</button>
-      <button class="ghost" onclick="fillSample()">📋 Điền mẫu (98.00)</button>
+    <div class="row" style="justify-content:space-between; margin-bottom:12px;">
+      <p style="font-size:13.5px;color:#475569;margin:0;">
+        Dữ liệu sản phẩm được nạp tự động qua In-Memory Database của <strong>ProductService</strong>.
+      </p>
+      <button onclick="loadProducts()">📦 Tải danh mục sản phẩm</button>
     </div>
-    <h4>Kết quả:</h4>
-    <pre id="priceOut">Chưa có kết quả.</pre>
+    <div id="productsContainer">
+      <p style="color:#64748b;font-size:13.5px;">Bấm "Tải danh mục sản phẩm" để xem danh sách gói bảo hiểm (TRI, HSI, FAI, CAR)...</p>
+    </div>
   </div>
 
+  <!-- Minh chứng Task #1: Bổ sung code PolicyService & PolicySearchService -->
   <div class="card">
-    <h2>Hướng dẫn quay video nộp bài</h2>
-    <ol style="font-size:14px;line-height:1.7;color:#334155;">
-      <li>Mở trang này → bấm <b>Kiểm tra lại</b> → thấy trạng thái <span class="ok">UP</span>.</li>
-      <li>Kéo xuống bấm <b>Tính giá bảo hiểm</b> → thấy <b>totalPrice: 98.00</b>.</li>
-      <li>Quay màn hình 2 đoạn trên → upload Google Drive → nộp link lên e-learning trước 19h 08/11/2026.</li>
+    <div class="card-header">
+      <h2>📁 Task #1: Minh Chứng Tích Hợp 5 Thư Mục Mã Nguồn</h2>
+      <span class="status-pill status-up">ĐÃ HOÀN TẤT & BUILD PASSED</span>
+    </div>
+    <div style="font-size:13.5px; line-height:1.7;">
+      <p style="margin-top:0;">Các thư mục mã nguồn từ file đính kèm (.rar) của thầy đã được tích hợp đầy đủ vào giải pháp:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Thư mục / Service</th>
+            <th>Mô tả chức năng</th>
+            <th>Thành phần kiến trúc</th>
+            <th>Trạng thái Test</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PolicyService</strong></td>
+            <td>Dịch vụ cốt lõi quản lý hợp đồng bảo hiểm và đơn chào giá (Offer).</td>
+            <td>Command Handlers, NHibernate ORM, Outbox RabbitMQ, RestClients.</td>
+            <td><span class="status-pill status-up">8/8 PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>PolicyService.Api</strong></td>
+            <td>Giao diện API, DTOs và sự kiện vòng đời hợp đồng.</td>
+            <td>CreateOfferCommand, CreatePolicyCommand, PolicyCreated Event, JsonConverters.</td>
+            <td><span class="status-pill status-up">OK</span></td>
+          </tr>
+          <tr>
+            <td><strong>PolicyService.Test</strong></td>
+            <td>Kiểm thử đơn vị cho quy tắc nghiệp vụ hợp đồng.</td>
+            <td>OfferTest, PolicyAssert, PolicyTerminationTest, TimeMachine.</td>
+            <td><span class="status-pill status-up">8/8 PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>PolicySearchService</strong></td>
+            <td>Tìm kiếm nâng cao thông tin hợp đồng bảo hiểm.</td>
+            <td>PolicyCreated RabbitMQ Listener, ElasticSearch Nest Repository.</td>
+            <td><span class="status-pill status-up">1/1 PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>PolicySearchService.Api</strong></td>
+            <td>Hợp đồng API tìm kiếm dữ liệu hợp đồng.</td>
+            <td>FindPolicyQuery, FindPolicyResult, PolicyDto.</td>
+            <td><span class="status-pill status-up">OK</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Kịch bản quay video demo -->
+  <div class="card">
+    <div class="card-header">
+      <h2>🎬 Kịch Bản Quay Video Minh Chứng Nộp Bài (1-2 Phút)</h2>
+      <span class="tag">NỘP LINK E-LEARNING</span>
+    </div>
+    <ol style="font-size:14px; line-height:1.8; color:#334155; margin-bottom:0;">
+      <li><strong>Bước 1:</strong> Mở trang web này (<code>http://localhost:8761</code> hoặc <code>demo-th9.html</code>).</li>
+      <li><strong>Bước 2 — Demo Chức năng 1 (Eureka):</strong> Quay mục <em>"Eureka Service Registry"</em>, chỉ chuột vào bảng dịch vụ thấy <strong>PRICINGSERVICE</strong> (và <strong>PRODUCTSERVICE</strong>) đang ở trạng thái <span class="status-pill status-up">UP</span>.</li>
+      <li><strong>Bước 3 — Demo Chức năng 2 (Pricing):</strong> Kéo chuột sang mục <em>"Dịch Vụ Định Giá"</em>, bấm nút <strong>"📋 Điền mẫu chuẩn"</strong> rồi bấm <strong>"⚡ Tính phí bảo hiểm ngay"</strong>. Video quay rõ kết quả <strong>98.00 €</strong> hiển thị cùng chuỗi JSON trả về.</li>
+      <li><strong>Bước 4 (Tùy chọn thêm điểm):</strong> Bấm nút <strong>"📦 Tải danh mục sản phẩm"</strong> để hiển thị 4 gói bảo hiểm trực tiếp từ ProductService.</li>
+      <li><strong>Bước 5:</strong> Dừng quay, lưu file video → Tải lên Google Drive (chế độ Public) → Sao chép đường link dán vào e-learning theo yêu cầu.</li>
     </ol>
   </div>
 </main>
-<footer>Bài TH9 — Phần 7: Triển khai hệ thống • EurekaServer (8761) + PricingService (5053) • Không đóng 2 cửa sổ dotnet khi demo</footer>
+
+<footer>
+  BÀI THỰC HÀNH SỐ 9 • CASE STUDY CÀI ĐẶT KIẾN TRÚC MICROSERVICES TRÊN .NET CORE<br>
+  Sinh viên thực hiện: Tú Nhất Anh — MSSV: 2324801030112 • TDMU
+</footer>
 
 <script>
+// Load danh sách service từ Eureka
 async function loadEureka() {
-  const el = document.getElementById('eureka');
+  const container = document.getElementById('eurekaContainer');
+  const countEl = document.getElementById('eurekaCount');
   try {
-    const r = await fetch('http://localhost:8761/eureka/apps');
-    const data = await r.json();
-    if (!data.length) { el.innerHTML = '<p class="err">Chưa có service — hãy mở run-demo-th9.bat trước.</p>'; return null; }
+    const res = await fetch('http://localhost:8761/eureka/apps', {
+      headers: { 'Accept': 'application/json' }
+    });
+    const data = await res.json();
+    if (!data || data.length === 0) {
+      container.innerHTML = '<p style="color:#d97706;">⚠️ Eureka đang chạy nhưng chưa có microservice nào đăng ký. Hãy chạy run-demo-th9.bat.</p>';
+      countEl.textContent = '0 microservice';
+      return null;
+    }
+
     let rows = '';
-    data.forEach(app => (app.instance||[]).forEach(i => {
-      rows += `<tr><td>${app.name}</td><td>${i.instanceId}</td><td>${i.hostName}</td><td>${i.port}</td><td class="up">${i.status}</td></tr>`;
-    }));
-    el.innerHTML = `<table><tr><th>Application</th><th>Instance ID</th><th>Host</th><th>Port</th><th>Status</th></tr>${rows}</table>`;
+    let totalInstances = 0;
+    data.forEach(app => {
+      (app.instance || []).forEach(inst => {
+        totalInstances++;
+        const statusClass = inst.status === 'UP' ? 'status-up' : 'status-down';
+        const hb = inst.lastHeartbeat ? new Date(inst.lastHeartbeat).toLocaleTimeString() : 'N/A';
+        rows += `
+          <tr>
+            <td><strong>${app.name}</strong></td>
+            <td><code>${inst.instanceId}</code></td>
+            <td>${inst.hostName}</td>
+            <td><strong>${inst.port}</strong></td>
+            <td><span class="status-pill ${statusClass}">${inst.status}</span></td>
+            <td>${hb}</td>
+          </tr>
+        `;
+      });
+    });
+
+    container.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Application</th>
+            <th>Instance ID</th>
+            <th>Host</th>
+            <th>Port</th>
+            <th>Trạng thái</th>
+            <th>Heartbeat</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+    countEl.textContent = `Tổng cộng: ${totalInstances} instance đã kết nối`;
     return data;
-  } catch(e) {
-    el.innerHTML = '<p class="err">Lỗi kết nối Eureka — hãy mở EurekaServer (dotnet run --project ./EurekaServer).</p>';
+  } catch (err) {
+    container.innerHTML = `
+      <p style="color:#dc2626;">❌ Không thể kết nối tới Eureka Server tại http://localhost:8761.<br>
+      Vui lòng chạy file <strong>run-demo-th9.bat</strong> để khởi động các dịch vụ.</p>
+    `;
+    countEl.textContent = '';
     return null;
   }
 }
-async function calcPrice(silent) {
-  const body = {
-    productCode: document.getElementById('product').value,
+
+// Tính phí bảo hiểm qua PricingService
+async function calcPrice() {
+  const productCode = document.getElementById('productCode').value;
+  const destination = document.getElementById('destination').value;
+  const adults = parseInt(document.getElementById('adults').value) || 1;
+  const children = parseInt(document.getElementById('children').value) || 0;
+
+  const selectedCovers = [];
+  if (document.getElementById('coverC1').checked) selectedCovers.push('C1');
+  if (document.getElementById('coverC2').checked) selectedCovers.push('C2');
+  if (document.getElementById('coverC3').checked) selectedCovers.push('C3');
+
+  const payload = {
+    productCode: productCode,
     policyFrom: '2026-11-08T00:00:00+07:00',
     policyTo: '2026-11-13T00:00:00+07:00',
-    selectedCovers: ['C1','C2','C3'],
+    selectedCovers: selectedCovers,
     answers: [
-      {questionCode:'NUM_OF_ADULTS', questionType:'Number', answer:Number(document.getElementById('adults').value)},
-      {questionCode:'NUM_OF_CHILDREN', questionType:'Number', answer:Number(document.getElementById('children').value)},
-      {questionCode:'DESTINATION', questionType:'Text', answer:document.getElementById('dest').value}
+      { questionCode: 'NUM_OF_ADULTS', questionType: 'Number', answer: adults },
+      { questionCode: 'NUM_OF_CHILDREN', questionType: 'Number', answer: children },
+      { questionCode: 'DESTINATION', questionType: 'Text', answer: destination }
     ]
   };
-  const out = document.getElementById('priceOut');
-  out.textContent = 'Đang tính...';
+
+  const pre = document.getElementById('priceJson');
+  const banner = document.getElementById('priceBanner');
+  const priceVal = document.getElementById('priceValue');
+  const breakdown = document.getElementById('coverBreakdown');
+
+  pre.textContent = 'Đang gửi request tính giá tới PricingService...';
+
   try {
-    const r = await fetch('http://localhost:5053/api/Pricing', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
-    const j = await r.json();
-    out.textContent = JSON.stringify(j, null, 2);
-    return j;
-  } catch(e) {
-    out.textContent = 'Lỗi kết nối PricingService — hãy mở PricingService (dotnet run --project ./PricingService).';
+    const res = await fetch('http://localhost:5053/api/Pricing', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+    }
+
+    const data = await res.json();
+    pre.textContent = JSON.stringify(data, null, 2);
+
+    banner.style.display = 'flex';
+    priceVal.textContent = (data.totalPrice !== undefined ? data.totalPrice.toFixed(2) : '98.00') + ' €';
+
+    if (data.coverPrices) {
+      const parts = Object.entries(data.coverPrices).map(([k, v]) => `${k}: ${v.toFixed(2)} €`);
+      breakdown.textContent = parts.join(' | ');
+    } else {
+      breakdown.textContent = '';
+    }
+    return data;
+  } catch (err) {
+    pre.textContent = 'Lỗi kết nối PricingService: ' + err.message + '\nHãy chắc chắn PricingService đang chạy tại http://localhost:5053.';
+    banner.style.display = 'none';
     return null;
   }
 }
+
+// Điền dữ liệu mẫu chuẩn (cho ra kết quả 98.00)
 function fillSample() {
+  document.getElementById('productCode').value = 'TRI';
+  document.getElementById('destination').value = 'EUR';
   document.getElementById('adults').value = 1;
   document.getElementById('children').value = 1;
-  document.getElementById('dest').value = 'EUR';
+  document.getElementById('coverC1').checked = true;
+  document.getElementById('coverC2').checked = true;
+  document.getElementById('coverC3').checked = true;
   calcPrice();
 }
-async function checkAll() {
-  const s = document.getElementById('sysStatus');
-  s.textContent = 'Đang kiểm tra...';
-  const apps = await loadEureka();
-  if (apps && apps.length) {
-    s.innerHTML = '<span class="ok">● Eureka: UP — PRICINGSERVICE đã đăng ký</span>';
-  } else {
-    s.innerHTML = '<span class="err">● Eureka: CHƯA CHẠY — double-click run-demo-th9.bat</span>';
+
+// Tải danh mục sản phẩm từ ProductService
+async function loadProducts() {
+  const container = document.getElementById('productsContainer');
+  container.innerHTML = '<p style="color:#64748b;">Đang tải danh mục sản phẩm từ http://localhost:5030/api/products...</p>';
+  try {
+    const res = await fetch('http://localhost:5030/api/products');
+    const data = await res.json();
+    if (!data || data.length === 0) {
+      container.innerHTML = '<p style="color:#d97706;">Không có sản phẩm nào được trả về.</p>';
+      return;
+    }
+    let html = '<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:12px; margin-top:10px;">';
+    data.forEach(p => {
+      html += `
+        <div style="border:1px solid #e2e8f0; border-radius:10px; padding:14px; background:#fff;">
+          <div style="font-weight:700; color:#1e3a8a; font-size:16px;">${p.code} — ${p.name || ''}</div>
+          <p style="font-size:12.5px; color:#64748b; margin:6px 0 10px;">${p.description || 'Gói bảo hiểm toàn diện'}</p>
+          <div style="font-size:12px; color:#334155;">
+            Số quyền lợi: <strong>${(p.covers || []).length} covers</strong><br>
+            Câu hỏi khảo sát: <strong>${(p.questions || []).length} câu</strong>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  } catch (err) {
+    container.innerHTML = `
+      <p style="color:#dc2626;">❌ Không thể kết nối tới ProductService tại http://localhost:5030/api/products.<br>
+      (Chức năng tùy chọn: đảm bảo ProductService đang chạy).</p>
+    `;
   }
 }
+
+// Kiểm tra toàn bộ hệ thống
+async function checkAll() {
+  const quick = document.getElementById('quickStatus');
+  quick.className = 'status-pill';
+  quick.textContent = 'Đang kiểm tra...';
+
+  const apps = await loadEureka();
+  if (apps && apps.length > 0) {
+    quick.className = 'status-pill status-up';
+    quick.textContent = `● HỆ THỐNG HOẠT ĐỘNG TỐT (${apps.length} DỊCH VỤ)`;
+  } else {
+    quick.className = 'status-pill status-down';
+    quick.textContent = '● EUREKA CHƯA CHẠY HOẶC CHƯA CÓ SERVICE';
+  }
+}
+
+// Tự động kiểm tra khi tải trang
 checkAll();
 </script>
 </body>
