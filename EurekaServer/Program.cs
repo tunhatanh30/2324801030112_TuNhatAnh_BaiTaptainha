@@ -8,8 +8,10 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddCors(o => o.AddPolicy("AllowAny", b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
 var app = builder.Build();
+app.UseCors("AllowAny"); // TH9 demo web: cho phep trang demo goi API
 
 // ---- In-memory Eureka registry ----
 var registry = new EurekaRegistry();

@@ -18,6 +18,7 @@ ConfigureServices(builder.Services, builder.Configuration);
 var app = builder.Build();
 
 app.UseMiddleware<ValidationExceptionMiddleware>(); // ánh xạ ValidationException -> HTTP 400
+app.UseCors("AllowAny"); // TH9 demo web: cho phep trang demo goi API
 app.UseDiscoveryClient(); // Task #2: đăng ký dịch vụ lên Eureka
 app.MapControllers();
 
@@ -28,6 +29,7 @@ public partial class Program
     static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers().AddNewtonsoftJson();
+        services.AddCors(o => o.AddPolicy("AllowAny", b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
@@ -54,6 +56,7 @@ public partial class Program
                 webBuilder.Configure(app =>
                 {
                     app.UseMiddleware<ValidationExceptionMiddleware>();
+                    app.UseCors("AllowAny");
                     app.UseDiscoveryClient();
                     app.UseEndpoints(endpoints => endpoints.MapControllers());
                 });
