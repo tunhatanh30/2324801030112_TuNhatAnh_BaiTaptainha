@@ -2,63 +2,109 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<title>Demo TH9 — Eureka + Pricing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo TH9 — Hệ thống Microservices Bảo hiểm</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 24px; background:#f7f7fb; color:#222; }
-  h1 { font-size: 22px; }
-  .card { background:#fff; border:1px solid #ddd; border-radius:8px; padding:16px; margin:16px 0; max-width:860px; }
-  button { padding:8px 14px; border:0; border-radius:6px; background:#007bff; color:#fff; cursor:pointer; }
-  button:hover { background:#0056b3; }
-  table { border-collapse: collapse; width:100%; margin-top:12px; }
-  th,td { border:1px solid #ccc; padding:8px; text-align:left; }
-  th { background:#f0f0f0; }
-  .up { color:green; font-weight:bold; }
-  pre { background:#111; color:#0f0; padding:12px; border-radius:6px; overflow:auto; }
-  label { display:inline-block; margin:4px 8px 4px 0; }
-  input, select { padding:6px; margin:2px 6px 2px 0; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; margin:0; background:#f4f6fb; color:#1a2233; }
+  header { background: linear-gradient(135deg,#0b5cff,#00b386); color:#fff; padding:22px; }
+  header h1 { margin:0 0 6px; font-size:24px; }
+  header p { margin:0; opacity:.95; font-size:14px; }
+  .badge { display:inline-block; background:#ffffff33; padding:3px 10px; border-radius:20px; font-size:12px; margin-top:10px; }
+  main { max-width:960px; margin:0 auto; padding:20px; }
+  .card { background:#fff; border:1px solid #e3e7f0; border-radius:12px; padding:18px; margin:16px 0; box-shadow:0 2px 10px #0001; }
+  .card h2 { margin-top:0; font-size:18px; }
+  button { padding:9px 16px; border:0; border-radius:8px; background:#0b5cff; color:#fff; cursor:pointer; font-size:14px; font-weight:600; }
+  button:hover { background:#0846c9; }
+  button.ghost { background:#eef2ff; color:#0b5cff; }
+  table { border-collapse: collapse; width:100%; margin-top:12px; font-size:14px; }
+  th,td { border:1px solid #dde3ee; padding:8px; text-align:left; }
+  th { background:#f0f4ff; }
+  .up { color:#0a9d58; font-weight:700; }
+  pre { background:#0f172a; color:#86efac; padding:14px; border-radius:10px; overflow:auto; font-size:13px; min-height:60px; }
+  input, select { padding:8px; border:1px solid #cbd5e1; border-radius:8px; margin:3px 8px 3px 0; font-size:14px; }
+  label { font-size:13px; color:#334155; display:inline-block; margin:4px 0; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .ok { color:#0a9d58; font-weight:600; }
+  .err { color:#dc2626; font-weight:600; }
+  footer { text-align:center; color:#64748b; font-size:12px; padding:20px; }
+  a { color:#0b5cff; }
 </style>
 </head>
 <body>
-<h1>🎉 Demo Bài TH9 — Triển khai hệ thống</h1>
-<p>Chức năng 1: Eureka Service Registry &nbsp;|&nbsp; Chức năng 2: Pricing Service (tính giá bảo hiểm)</p>
+<header>
+  <h1>🎉 Demo Bài TH9 — Triển khai hệ thống Microservices</h1>
+  <p>Công ty Bảo hiểm • Chức năng 1: Eureka Discovery &nbsp;|&nbsp; Chức năng 2: Pricing Service</p>
+  <span class="badge">Sinh viên: Tú Nhất Anh — 2324801030112</span>
+</header>
+<main>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;">
+      <h2 style="margin:0">Trạng thái hệ thống</h2>
+      <span id="sysStatus">Đang kiểm tra...</span>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <button onclick="checkAll()">✅ Kiểm tra lại</button>
+      <button class="ghost" onclick="loadEureka()">🔄 Refresh Eureka</button>
+      <a href="http://localhost:8761" target="_blank">Mở Eureka Dashboard →</a>
+    </div>
+  </div>
 
-<div class="card">
-  <h3>Chức năng 1 — Eureka Registry (8761)</h3>
-  <button onclick="loadEureka()">🔄 Lấy danh sách service từ Eureka</button>
-  <div id="eureka"></div>
-  <p>Mở dashboard: <a href="http://localhost:8761" target="_blank">http://localhost:8761</a></p>
-</div>
+  <div class="card">
+    <h2>Chức năng 1 — Eureka Service Registry (cổng 8761)</h2>
+    <p style="font-size:14px;color:#475569;">PricingService tự đăng ký lên Eureka khi khởi động. Bảng dưới tự tải từ <code>GET /eureka/apps</code>.</p>
+    <div id="eureka"><p>Đang tải...</p></div>
+  </div>
 
-<div class="card">
-  <h3>Chức năng 2 — Pricing Service (5053)</h3>
-  <label>ProductCode: <input id="product" value="TRI"></label>
-  <label>Số người lớn: <input id="adults" type="number" value="1" min="1"></label>
-  <label>Số trẻ em: <input id="children" type="number" value="1" min="0"></label>
-  <label>Destination:
-    <select id="dest"><option value="EUR">EUR</option><option value="WORLD">WORLD</option></select>
-  </label>
-  <button onclick="calcPrice()">💰 Tính giá</button>
-  <pre id="priceOut">Chưa có kết quả. (Kết quả mẫu trước: totalPrice 98.00)</pre>
-</div>
+  <div class="card">
+    <h2>Chức năng 2 — Pricing Service (cổng 5053)</h2>
+    <p style="font-size:14px;color:#475569;">Nhập thông tin khách hàng → tính giá bảo hiểm (TRI). Quay video đoạn này là đủ chứng minh.</p>
+    <div>
+      <label>ProductCode<br><input id="product" value="TRI" style="width:120px"></label>
+      <label>Số người lớn<br><input id="adults" type="number" value="1" min="1" style="width:90px"></label>
+      <label>Số trẻ em<br><input id="children" type="number" value="1" min="0" style="width:90px"></label>
+      <label>Destination<br>
+        <select id="dest"><option value="EUR">EUR (Châu Âu)</option><option value="WORLD">WORLD (Quốc tế)</option></select>
+      </label>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <button onclick="calcPrice()">💰 Tính giá bảo hiểm</button>
+      <button class="ghost" onclick="fillSample()">📋 Điền mẫu (98.00)</button>
+    </div>
+    <h4>Kết quả:</h4>
+    <pre id="priceOut">Chưa có kết quả.</pre>
+  </div>
+
+  <div class="card">
+    <h2>Hướng dẫn quay video nộp bài</h2>
+    <ol style="font-size:14px;line-height:1.7;color:#334155;">
+      <li>Mở trang này → bấm <b>Kiểm tra lại</b> → thấy trạng thái <span class="ok">UP</span>.</li>
+      <li>Kéo xuống bấm <b>Tính giá bảo hiểm</b> → thấy <b>totalPrice: 98.00</b>.</li>
+      <li>Quay màn hình 2 đoạn trên → upload Google Drive → nộp link lên e-learning trước 19h 08/11/2026.</li>
+    </ol>
+  </div>
+</main>
+<footer>Bài TH9 — Phần 7: Triển khai hệ thống • EurekaServer (8761) + PricingService (5053) • Không đóng 2 cửa sổ dotnet khi demo</footer>
 
 <script>
 async function loadEureka() {
   const el = document.getElementById('eureka');
-  el.innerHTML = 'Đang tải...';
   try {
     const r = await fetch('http://localhost:8761/eureka/apps');
     const data = await r.json();
-    if (!data.length) { el.innerHTML = '<p>Chưa có service nào, hãy khởi động EurekaServer + PricingService.</p>'; return; }
+    if (!data.length) { el.innerHTML = '<p class="err">Chưa có service — hãy mở run-demo-th9.bat trước.</p>'; return null; }
     let rows = '';
     data.forEach(app => (app.instance||[]).forEach(i => {
       rows += `<tr><td>${app.name}</td><td>${i.instanceId}</td><td>${i.hostName}</td><td>${i.port}</td><td class="up">${i.status}</td></tr>`;
     }));
     el.innerHTML = `<table><tr><th>Application</th><th>Instance ID</th><th>Host</th><th>Port</th><th>Status</th></tr>${rows}</table>`;
+    return data;
   } catch(e) {
-    el.innerHTML = '<p style="color:red">Lỗi kết nối Eureka. Hãy mở EurekaServer trước (dotnet run --project ./EurekaServer).</p>';
+    el.innerHTML = '<p class="err">Lỗi kết nối Eureka — hãy mở EurekaServer (dotnet run --project ./EurekaServer).</p>';
+    return null;
   }
 }
-async function calcPrice() {
+async function calcPrice(silent) {
   const body = {
     productCode: document.getElementById('product').value,
     policyFrom: '2026-11-08T00:00:00+07:00',
@@ -76,11 +122,29 @@ async function calcPrice() {
     const r = await fetch('http://localhost:5053/api/Pricing', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
     const j = await r.json();
     out.textContent = JSON.stringify(j, null, 2);
+    return j;
   } catch(e) {
-    out.textContent = 'Lỗi kết nối PricingService. Hãy mở PricingService trước (dotnet run --project ./PricingService).';
+    out.textContent = 'Lỗi kết nối PricingService — hãy mở PricingService (dotnet run --project ./PricingService).';
+    return null;
   }
 }
-loadEureka();
+function fillSample() {
+  document.getElementById('adults').value = 1;
+  document.getElementById('children').value = 1;
+  document.getElementById('dest').value = 'EUR';
+  calcPrice();
+}
+async function checkAll() {
+  const s = document.getElementById('sysStatus');
+  s.textContent = 'Đang kiểm tra...';
+  const apps = await loadEureka();
+  if (apps && apps.length) {
+    s.innerHTML = '<span class="ok">● Eureka: UP — PRICINGSERVICE đã đăng ký</span>';
+  } else {
+    s.innerHTML = '<span class="err">● Eureka: CHƯA CHẠY — double-click run-demo-th9.bat</span>';
+  }
+}
+checkAll();
 </script>
 </body>
 </html>
